@@ -53,9 +53,24 @@ def search_logs(request):
                 currentPage = []
                 index = 0
 
+        if len(pages) == 0:
+            pages.append(render_to_string("public/partial/logs_table.html",
+                                          context={}, request=request))
+
+        pageNumArray = []
+        index = 1
+        for page in pages:
+            pageNumArray.append(index)
+            index += 1
+
+
         return JsonResponse({
             "pageCount": len(pages),
-            "pages": pages
+            "pages": pages,
+            "page_nav": render_to_string("public/partial/logs_pages.html",
+                                             {
+                                                "pages": pageNumArray
+                                             }, request)
         })
 
 

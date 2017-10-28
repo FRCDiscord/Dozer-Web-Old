@@ -1,0 +1,9 @@
+<nav aria-label="Page Navigation" style="margin-top: 10px;">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" onclick="page(currentPage-1)" href="javascript:void(0);">Previous</a></li>
+        {% for page in pages %}
+            <li class="page-item active"><a class="page-link" onclick="page({{page}})" href="javascript:void(0);">{{page}}</a></li>
+        {% endfor %}
+        <li class="page-item"><a class="page-link" onclick="page(currentPage+1)" href="javascript:void(0);">Next</a></li>
+    </ul>
+</nav>

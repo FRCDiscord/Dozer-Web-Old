@@ -33,7 +33,7 @@ class Log(models.Model):
     reason = models.TextField(max_length=500, null=False)
     punishment = models.ForeignKey(Punishment, null=False)
     staff = models.ForeignKey(User, related_name="staff_punisher", null=False)
-    actionTime = models.DateTimeField(auto_now_add=True) #TODO: change this?
+    actionTime = models.DateTimeField(auto_now_add=True)
 
     def progress(self):
         timeDiff = datetime.now(timezone.utc) - self.actionTime
