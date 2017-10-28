@@ -1,0 +1,80 @@
+{% extends "public/base.html" %}
+
+{% block content %}
+
+    <h2 class="card-title">Mod Logs</h2>
+    <p>
+        A running tracker of anything the moderation team does on the Discord. This
+        includes warnings, punishments, and most changes to the server. These logs
+    can be searched through and filtered to see the actions of specific staff members,
+    the history of specific users, and <i>other things</i>.
+    </p>
+    <a data-toggle="collapse" href="#search"><h5>Search/Filter Logs</h5></a>
+    <div class="collapse" id="search">
+        <div class="card card-body">
+
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-lg-3">
+                        <label for="punish_user">Recipient Username</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">@</div>
+
+                            <input type="text" class="form-control dropdown-toggle" id="punish_user" data-toggle="dropdown" placeholder="User#0000">
+                            <!--<div id="user_dropdown" class="dropdown-menu">
+                                <a class="dropdown-item" href="#">H2O2O#4444</a>
+                                <a class="dropdown-item" href="#">Ornamus#3164</a>
+                                <a class="dropdown-item" href="#">FakeGuy#1237</a>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 col-lg-3">
+                        <label for="staff">Staff Name or Username</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">@</div>
+                            <input type="text" class="form-control" id="staff" placeholder="CalTran">
+                        </div>
+                    </div>
+                </div>
+                <div row>
+                <button class="col-6 col-md-4 col-lg-2 btn btn-primary" role="button" onclick="search()">Search</button>
+                </div>
+            {% csrf_token%}
+        </div>
+    </div>
+    <nav aria-label="Page Navigation" style="margin-top: 10px;">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+
+        </ul>
+    </nav>
+    <div id="tablediv">
+    </div>
+    <script>
+        function search() {
+            sendData = {
+                reverse: false
+            }
+            punished_user = $("#punish_user").val()
+            if (punished_user != undefined && punished_user != "") {
+                sendData['punished_user'] = punished_user
+            }
+            staff_user = $("#staff").val()
+            if (staff_user !=undefined && staff_user != "") {
+                sendData['staff_user'] = staff_user
+            }
+            $.post("{% url 'public:logs_search' %}", sendData).done(function(data){
+                console.log(data)
+                if (data.pageCount > 0) {
+                    $("#tablediv").html(data.pages[0])
+                } else {
+                    $("#tablediv").html("")
+                }
+            });
+        }
+    </script>
+{% endblock %}
