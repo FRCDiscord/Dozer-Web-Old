@@ -66,21 +66,37 @@
                 sendData['staff_user'] = staff_user
             }
             $.post("{% url 'public:logs_search' %}", sendData).done(function(data){
-                console.log(data)
+                //console.log(data)
                 pages = data.pages
-                page(1)
                 if (data.pageCount > 1) {
                     $("#pagediv").html(data.page_nav)
                 } else {
                     $("#pagediv").empty()
                 }
+                page(1)
             });
         }
 
         function page(num) {
             if (num > 0 && num <= pages.length) {
                 currentPage = num
-                $("#tablediv").html(pages[num-1])
+                $("#tablediv").html(pages[currentPage-1])
+                $(".page-item").removeClass("active")
+                $(".page-item").each(function() {
+                    if ($(this).text() == currentPage) {
+                        $(this).addClass("active")
+                    }
+                })
+                if (currentPage == 1) {
+                    $("#page_first").addClass("disabled")
+                } else {
+                    $("#page_first").remove("disabled")
+                }
+                if (currentPage == pages.length) {
+                    $("#page_last").addClass("disabled")
+                } else {
+                    $("#page_last").remove("disabled")
+                }
             }
         }
     </script>

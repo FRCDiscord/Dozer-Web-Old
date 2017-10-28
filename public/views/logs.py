@@ -3,7 +3,8 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from public.models import Log
+from public.models import Log, User, Punishment
+import datetime
 
 @csrf_exempt
 def mod_logs(request):
@@ -13,7 +14,6 @@ def mod_logs(request):
 
 @csrf_exempt
 def search_logs(request):
-    print("searching lets go")
     if request.method == 'GET':
         return JsonResponse({
             "error": "This is used via POST only."
@@ -30,17 +30,16 @@ def search_logs(request):
             s |= Q(staff__name=data['staff_user'])
             q &= s
 
-        logs = Log.objects.filter(q).order_by('actionTime')
-        if bool(data['reverse']):
-            logs.reverse()
-
-        print(str(len(logs)) + " log results")
+        logs = None
+        if not bool(data['reverse']):
+            logs = Log.objects.filter(q).order_by('actionTime')
+        else:
+            logs = Log.objects.filter(q).order_by('actionTime').reverse()
 
         pages = []
         index = 0
         currentPage = []
         for realIndex, log in enumerate(logs):
-            print(str(log))
             currentPage.append(log)
             index += 1
             realIndex += 1
@@ -74,3 +73,39 @@ def search_logs(request):
         })
 
 
+@csrf_exempt
+def create_log(request):
+    if request.method == 'GET':
+        return JsonResponse({
+            "success": False,
+            "error": "This is used via POST only."
+        })
+    else:
+        data = request.POST
+        if 'token' in data:
+            if data['token'] == "token_that_is_very_secure":
+                punished = User.getUser(data['punished'])
+                staff = User.getUser(data['staff'])
+                staff.staff = True
+                staff.save()
+                punishment = Punishment.objects.get(key=data['punishment'])
+                log = Log(
+                    punished=punished,
+                    reason=data['reason'],
+                    punishment=punishment,
+                    staff=staff
+                )
+                log.save()
+                return JsonResponse({
+                    "success": True
+                })
+            else:
+                return JsonResponse({
+                    "success": False,
+                    "error": "Incorrect token."
+                })
+        else:
+            return JsonResponse({
+                "success": False,
+                "error": "No token found."
+            })

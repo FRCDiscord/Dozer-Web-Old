@@ -17,6 +17,14 @@ class User(models.Model):
         else:
             return self.username
 
+    def getUser(username):
+        try:
+            user = User.objects.get(username=username)
+        except Exception:
+            user = User(username=username)
+            user.save()
+        return user
+
 
 class Punishment(models.Model):
     key = models.CharField(max_length=30, primary_key=True)
@@ -28,12 +36,11 @@ class Punishment(models.Model):
 
 
 class Log(models.Model):
-    key = models.CharField(max_length=50, primary_key=True)
     punished = models.ForeignKey(User, related_name="user_punished",null=False)
     reason = models.TextField(max_length=500, null=False)
     punishment = models.ForeignKey(Punishment, null=False)
     staff = models.ForeignKey(User, related_name="staff_punisher", null=False)
-    actionTime = models.DateTimeField(auto_now_add=True)
+    actionTime = models.DateTimeField(auto_now_add=True, primary_key=True)
 
     def progress(self):
         timeDiff = datetime.now(timezone.utc) - self.actionTime
