@@ -38,6 +38,7 @@ class Punishment(models.Model):
     key = models.CharField(max_length=30, primary_key=True)
     name = models.TextField(max_length=100, null=False, blank=False)
     timeInHours = models.IntegerField(default=0)
+    appealWaitHours = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name + " (" + self.key + ")"
@@ -60,8 +61,28 @@ class Log(models.Model):
     def appeal_url(self):
         return reverse('public:mail') + "?appeal=" + self.key
 
+    # Whether this Log is allowed to be appealed or not
+    def can_appeal(self):
+        return self.progress() < 1 or not self.has_time()
+
+    # Whether it is within the appropriate time to appeal this Log or not
+    def should_appeal(self):
+        if not self.has_time():
+            return True
+        else:
+            wait = self.punishment.appealWaitHours
+            if wait > 0:
+                if self.time_elapsed() < wait:
+                    return False
+            return True
+
     def has_time(self):
         return self.punishment.timeInHours > 0
+
+    # time elapsed in hours
+    def time_elapsed(self):
+        diff = datetime.now(timezone.utc) - self.actionTime
+        return diff / timedelta(hours=1)
 
     def progress(self):
         if self.punishment.timeInHours > 0:

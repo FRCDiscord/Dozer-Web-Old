@@ -40,7 +40,6 @@ def handle(request, type):
 def handlePOST(request):
     return handle(request, 'POST')
 
-# TODO: confirm this works
 def handleGET(request):
     return handle(request, 'GET')
 

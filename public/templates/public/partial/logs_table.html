@@ -32,7 +32,7 @@
             <td>{{ log.actionTime }}</td>
             {% if request.user.is_authenticated %}
                 {% if log.punished.account == request.user and log.punished.verified %}
-                    {% if log.progress < 1 or not log.has_time %}
+                    {% if log.can_appeal %}
                         <td><a href="{{log.appeal_url | safe}}">Appeal</a></td>
                     {% else %}
                         <td>Expired</td>

@@ -23,13 +23,20 @@ def mail(request):
         except Exception:
             appeal = None
 
+    if appeal and not appeal.can_appeal():
+        return redirect("public:index")
+
+    error = None
+    if appeal and not appeal.should_appeal():
+        error = "You are trying to appeal this punishment before the appointed time frame. You can still try, but this isn't recommended."
+
     ctx = {
         "member": member,
         "prefill_name": prefill_name,
         "name_class_add": name_class_add,
         "prefill_subject": prefill_subject,
         "subject_class_add": subject_class_add,
-        "appeal": appeal
+        "appeal": appeal,
+        "error": error
     }
-    print(ctx)
     return render(request, "public/modmail.html", ctx)

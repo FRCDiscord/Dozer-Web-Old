@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f5dcb7e-bf43-466b-8b6a-62423b722454" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/migrations/0002_auto_20171028_2239.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/migrations/0003_apitoken.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/migrations/0004_apitoken_uses.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/migrations/0005_auto_20171029_1743.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/migrations/0006_member_user.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/migrations/0007_auto_20171029_1930.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/migrations/0008_auto_20171029_1931.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/migrations/0009_auto_20171029_1932.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/migrations/0010_member_account.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/models.py" afterPath="$PROJECT_DIR$/public/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/templates/public/base.html" afterPath="$PROJECT_DIR$/public/templates/public/base.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/templates/public/partial/logs_table.html" afterPath="$PROJECT_DIR$/public/templates/public/partial/logs_table.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/api.py" afterPath="$PROJECT_DIR$/public/views/api.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/views/mail.py" afterPath="$PROJECT_DIR$/public/views/mail.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,8 +26,8 @@
       <file leaf-file-name="mail.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/views/mail.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="23" column="16" lean-forward="true" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+            <state relative-caret-position="468">
+              <caret line="26" column="20" lean-forward="false" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
               <folding>
                 <element signature="e#0#45#0" expanded="true" />
               </folding>
@@ -46,8 +38,8 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="58" column="0" lean-forward="true" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+            <state relative-caret-position="376">
+              <caret line="70" column="13" lean-forward="false" selection-start-line="70" selection-start-column="13" selection-end-line="70" selection-end-column="13" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -87,7 +79,6 @@
         <option value="$PROJECT_DIR$/public/templates/public/partial/logs_pages.html" />
         <option value="$PROJECT_DIR$/public/templates/public/rankings.html" />
         <option value="$PROJECT_DIR$/public/tasks.py" />
-        <option value="$PROJECT_DIR$/public/views/api.py" />
         <option value="$PROJECT_DIR$/public/admin.py" />
         <option value="$PROJECT_DIR$/public/templates/public/login_register.htm.html" />
         <option value="$PROJECT_DIR$/env/lib/python3.4/site-packages/django/contrib/auth/models.py" />
@@ -101,9 +92,10 @@
         <option value="$PROJECT_DIR$/public/urls.py" />
         <option value="$PROJECT_DIR$/public/templates/public/account.html" />
         <option value="$PROJECT_DIR$/public/templates/public/modmail.html" />
-        <option value="$PROJECT_DIR$/public/templates/public/partial/logs_table.html" />
         <option value="$PROJECT_DIR$/public/templates/public/base.html" />
         <option value="$PROJECT_DIR$/public/views/basic.py" />
+        <option value="$PROJECT_DIR$/public/views/api.py" />
+        <option value="$PROJECT_DIR$/public/templates/public/partial/logs_table.html" />
         <option value="$PROJECT_DIR$/public/views/mail.py" />
         <option value="$PROJECT_DIR$/public/models.py" />
       </list>
@@ -256,7 +248,7 @@
     <frame x="0" y="27" width="1026" height="742" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24609375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -475,16 +467,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/views/api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1278">
-          <caret line="71" column="21" lean-forward="true" selection-start-line="71" selection-start-column="21" selection-end-line="71" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#36#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/env/lib/python3.4/site-packages/django/contrib/auth/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3997">
@@ -622,26 +604,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/views/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="60" column="25" lean-forward="true" selection-start-line="60" selection-start-column="25" selection-end-line="60" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/templates/public/modmail.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="34" column="32" lean-forward="true" selection-start-line="34" selection-start-column="32" selection-end-line="34" selection-end-column="32" />
+        <state relative-caret-position="284">
+          <caret line="30" column="23" lean-forward="false" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/templates/public/partial/logs_table.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="26" column="26" lean-forward="false" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
+        <state relative-caret-position="203">
+          <caret line="29" column="45" lean-forward="true" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/views/mail.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="23" column="16" lean-forward="true" selection-start-line="23" selection-start-column="16" selection-end-line="23" selection-end-column="16" />
+        <state relative-caret-position="468">
+          <caret line="26" column="20" lean-forward="false" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
           <folding>
             <element signature="e#0#45#0" expanded="true" />
           </folding>
@@ -650,8 +640,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="58" column="0" lean-forward="true" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+        <state relative-caret-position="376">
+          <caret line="70" column="13" lean-forward="false" selection-start-line="70" selection-start-column="13" selection-end-line="70" selection-end-column="13" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
