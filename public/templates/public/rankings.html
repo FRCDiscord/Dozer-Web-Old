@@ -1,0 +1,30 @@
+{% extends "public/base.html" %}
+
+{% block content %}
+    <h2 class="card-title">Activity Rankings</h2>
+    <p>
+        The formatting on this page is incredibly rough and early, so don't take <strong>anything</strong> here
+    as final. Thank you! :)
+    </p>
+    <ul class="list-group">
+        {% for user in players %}
+            <li class="list-group-item bg-dark">
+                <h5>
+                    <p class="text-light">
+                        <strong>#{{ user.rank }}:</strong> {{ user.name }}#{{ user.discriminator }}
+                    </p>
+                </h5>
+                <div class="text-light">Level {{ user.lvl }} [{{ user.xp }}/{{ user.lvl_xp }}]</div>
+                <div class="row">
+                    <div class="col-10 col-md-7 col-lg-5">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
+                                 style="width: {{ user.xp_percent }}%;">{{ user.xp_percent }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

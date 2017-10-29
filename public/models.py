@@ -55,6 +55,9 @@ class Log(models.Model):
     def progress_percent(self):
         return self.progress() * 100
 
+    def progress_percent_rounded(self):
+        return int(round(self.progress_percent(), 0))
+
 class APIToken(models.Model):
     token = models.CharField(max_length=50, null=False, primary_key=True)
     name = models.CharField(max_length=50, null=False, blank=True)
