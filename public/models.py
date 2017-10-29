@@ -42,6 +42,9 @@ class Log(models.Model):
     staff = models.ForeignKey(User, related_name="staff_punisher", null=False)
     actionTime = models.DateTimeField(auto_now_add=True, primary_key=True)
 
+    def __str__(self):
+        return self.staff.display() + " punished " + self.punished.username + " at " + str(self.actionTime)
+
     def progress(self):
         timeDiff = datetime.now(timezone.utc) - self.actionTime
         progress = timeDiff / timedelta(hours=self.punishment.timeInHours)
@@ -51,3 +54,10 @@ class Log(models.Model):
 
     def progress_percent(self):
         return self.progress() * 100
+
+class APIToken(models.Model):
+    token = models.CharField(max_length=50, null=False, primary_key=True)
+    name = models.CharField(max_length=50, null=False, blank=True)
+
+    def __str__(self):
+        return 'Token "' + self.name + '"'

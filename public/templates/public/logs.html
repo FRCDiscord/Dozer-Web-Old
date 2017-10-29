@@ -90,14 +90,24 @@
                 if (currentPage == 1) {
                     $("#page_first").addClass("disabled")
                 } else {
-                    $("#page_first").remove("disabled")
+                    $("#page_first").removeClass("disabled")
                 }
                 if (currentPage == pages.length) {
                     $("#page_last").addClass("disabled")
                 } else {
-                    $("#page_last").remove("disabled")
+                    $("#page_last").removeClass("disabled")
                 }
             }
+        }
+
+        function recipient(user) {
+            $("#punish_user").val(user)
+            $("#search").collapse('show')
+        }
+
+        function staff(user) {
+            $("#staff").val(user)
+            $("#search").collapse('show')
         }
     </script>
 {% endblock %}

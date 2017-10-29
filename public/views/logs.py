@@ -3,8 +3,9 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from public.models import Log, User, Punishment
-import datetime
+from public.models import Log, User, Punishment, APIToken
+
+PAGE_LENGTH = 10
 
 @csrf_exempt
 def mod_logs(request):
@@ -43,7 +44,7 @@ def search_logs(request):
             currentPage.append(log)
             index += 1
             realIndex += 1
-            if index == 6 or realIndex == len(logs):
+            if index == PAGE_LENGTH or realIndex == len(logs):
                 pages.append(render_to_string("public/partial/logs_table.html",
                                               context=
                                               {
@@ -71,41 +72,3 @@ def search_logs(request):
                                                 "pages": pageNumArray
                                              }, request)
         })
-
-
-@csrf_exempt
-def create_log(request):
-    if request.method == 'GET':
-        return JsonResponse({
-            "success": False,
-            "error": "This is used via POST only."
-        })
-    else:
-        data = request.POST
-        if 'token' in data:
-            if data['token'] == "token_that_is_very_secure":
-                punished = User.getUser(data['punished'])
-                staff = User.getUser(data['staff'])
-                staff.staff = True
-                staff.save()
-                punishment = Punishment.objects.get(key=data['punishment'])
-                log = Log(
-                    punished=punished,
-                    reason=data['reason'],
-                    punishment=punishment,
-                    staff=staff
-                )
-                log.save()
-                return JsonResponse({
-                    "success": True
-                })
-            else:
-                return JsonResponse({
-                    "success": False,
-                    "error": "Incorrect token."
-                })
-        else:
-            return JsonResponse({
-                "success": False,
-                "error": "No token found."
-            })

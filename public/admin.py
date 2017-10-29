@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Punishment)
 admin.site.register(User)
 admin.site.register(Log)
+admin.site.register(APIToken)
