@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import Member
-import requests
+from ..models import Member, Log
 
 def mail(request):
     data = request.GET
@@ -8,7 +7,7 @@ def mail(request):
     name_class_add = ""
     prefill_subject = ""
     subject_class_add = ""
-    appeal = False
+    appeal = None
     try:
         member = Member.objects.get(account=request.user, verified=True)
         prefill_name = member.username
@@ -16,18 +15,21 @@ def mail(request):
     except:
         member = None
 
-    if 'subject' in data:
-        prefill_subject = data['subject']
-        subject_class_add = "disabled"
-
     if 'appeal' in data and request.user.is_authenticated and member:
-        appeal = bool(data['appeal'])
+        try:
+            appeal = Log.objects.get(key=data['appeal'])
+            prefill_subject = appeal.appeal_subject()
+            subject_class_add = "disabled"
+        except Exception:
+            appeal = None
 
-    return render(request, "public/modmail.html", {
+    ctx = {
         "member": member,
         "prefill_name": prefill_name,
         "name_class_add": name_class_add,
         "prefill_subject": prefill_subject,
         "subject_class_add": subject_class_add,
         "appeal": appeal
-    })
+    }
+    print(ctx)
+    return render(request, "public/modmail.html", ctx)

@@ -4,6 +4,8 @@ from datetime import datetime, timezone, timedelta
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+def get_random_32_string():
+    return get_random_string(length=32)
 
 class Member(models.Model):
     username = models.CharField(max_length=50, primary_key=True)
@@ -41,13 +43,13 @@ class Punishment(models.Model):
         return self.name + " (" + self.key + ")"
 
 
-# TODO: random string as primary key, just like APITokens
 class Log(models.Model):
+    key = models.CharField(primary_key=True, max_length=32, default=get_random_32_string)
     punished = models.ForeignKey(Member, related_name="user_punished",null=False)
-    reason = models.TextField(max_length=500, null=False)
+    reason = models.TextField(max_length=500, null=False, default="Unknown")
     punishment = models.ForeignKey(Punishment, null=False)
     staff = models.ForeignKey(Member, related_name="staff_punisher", null=False)
-    actionTime = models.DateTimeField(auto_now_add=True, primary_key=True)
+    actionTime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.staff.display() + " punished " + self.punished.username + " at " + str(self.actionTime)
@@ -56,7 +58,7 @@ class Log(models.Model):
         return self.staff.display() + "'s " + self.punishment.name + " on me at " + str(self.actionTime)
 
     def appeal_url(self):
-        return reverse('public:mail') + "?appeal=True&subject=" + self.appeal_subject()
+        return reverse('public:mail') + "?appeal=" + self.key
 
     def has_time(self):
         return self.punishment.timeInHours > 0
