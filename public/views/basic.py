@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from ..models import Member
 import requests
-from ..models import User
 
 def index(request):
     return render(request, "public/index.html", {})
@@ -24,3 +24,15 @@ def rankings(request):
     return render(request, "public/rankings.html", {
         "players": json['players']
     })
+
+def account(request):
+    if request.user.is_authenticated:
+        try:
+            member = Member.objects.get(account=request.user)
+        except:
+            member = None
+        return render(request, "public/account.html", {
+            "member": member
+        })
+    else:
+        return redirect("public:index")

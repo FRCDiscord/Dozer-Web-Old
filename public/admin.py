@@ -3,6 +3,6 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Punishment)
-admin.site.register(User)
+admin.site.register(Member)
 admin.site.register(Log)
 admin.site.register(APIToken)

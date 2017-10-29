@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {% load static %}
+    {% load groups %}
     <title>FRC Discord</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -13,7 +14,6 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1d9759;">
-    <!--<div class="container">-->
     <a class="navbar-brand" href="{% url 'public:index' %}">The FRC Discord</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,9 +31,31 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'public:logs' %}">Mod Logs</a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'public:mail' %}">Mod Mail</a>
+            </li>
         </ul>
+        <ul class="navbar-nav ml-md-auto d-none d-md-flex">
+            {% if request.user|has_group:"discord-staff" %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'public:index' %}">Staff</a>
+                </li>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'public:account' %}">Account</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'public:logout' %}">Log Out</a>
+                </li>
+            {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'public:login' %}">Log In</a>
+                </li>
+            {% endif %}
+    </ul>
+
     </div>
-    <!--</div>-->
 </nav>
 
 <!-- Optional JavaScript -->

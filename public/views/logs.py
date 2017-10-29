@@ -3,14 +3,23 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from public.models import Log, User, Punishment, APIToken
+from public.models import Log
 
 PAGE_LENGTH = 10
 
 @csrf_exempt
 def mod_logs(request):
+    data = request.GET
+    user = ""
+    staff= ""
+    if 'user' in data:
+        user = data['user']
+    if 'staff' in data:
+        staff = data['staff']
     return render(request, "public/logs.html", {
-        "logs": Log.objects.all()
+        "logs": Log.objects.all(),
+        "user": user,
+        "staff": staff
     })
 
 @csrf_exempt

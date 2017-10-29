@@ -1,0 +1,41 @@
+{% extends "public/base.html" %}
+
+{% block content %}
+    {% if appeal %}
+        <h2>Punishment Appeal</h2>
+    {% else %}
+        <h2>Mod Mail</h2>
+        <p>
+            Want to send the mod team some feedback? Have a concern? Please contact us
+            through here!
+        </p>
+    {% endif %}
+    <form>
+        <fieldset {{name_class_add}}>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Jerry" value="{{prefill_name}}">
+                {% if not appeal %}
+                    <small class="form-text text-muted">
+                        We only ask for your name so that we can contact you if we have any questions.
+                        {% if request.user.is_authenticated %}
+                            If you'd <i>really</i> rather stay anonymous, you can
+                            <a href="{% url 'public:logout' %}">log out</a> first.
+                        {% endif %}
+                    </small>
+                {% endif %}
+            </div>
+        </fieldset>
+        <fieldset {{subject_class_add}}>
+            <div class="form-group">
+                <label for="name">Subject</label>
+                <input type="text" class="form-control" id="subject" placeholder="I am concerned about..." value="{{prefill_subject}}">
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <label for="name">Content</label>
+            <textarea class="form-control" id="text" rows="6"></textarea>
+        </div>
+        <button class="btn btn-primary" action="submit">Send</button>
+    </form>
+{% endblock %}

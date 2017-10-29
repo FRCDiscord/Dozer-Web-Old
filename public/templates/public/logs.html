@@ -19,7 +19,7 @@
                         <div class="input-group">
                             <div class="input-group-addon">@</div>
 
-                            <input type="text" class="form-control dropdown-toggle" id="punish_user" data-toggle="dropdown" placeholder="User#0000">
+                            <input type="text" class="form-control dropdown-toggle" id="punish_user" data-toggle="dropdown" placeholder="User#0000" value="{{user}}">
                             <!--<div id="user_dropdown" class="dropdown-menu">
                                 <a class="dropdown-item" href="#">H2O2O#4444</a>
                                 <a class="dropdown-item" href="#">Ornamus#3164</a>
@@ -31,7 +31,7 @@
                         <label for="staff">Staff Name or Username</label>
                         <div class="input-group">
                             <div class="input-group-addon">@</div>
-                            <input type="text" class="form-control" id="staff" placeholder="CalTran">
+                            <input type="text" class="form-control" id="staff" placeholder="CalTran" value="{{staff.display}}">
                         </div>
                     </div>
                 </div>
@@ -50,6 +50,9 @@
         var currentPage = -1
 
         $(document).ready(function(){
+            {% if user or staff %}
+                $("#search").collapse('show')
+            {% endif %}
            search()
         });
 

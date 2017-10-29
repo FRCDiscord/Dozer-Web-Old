@@ -1,0 +1,41 @@
+{% extends "public/base.html" %}
+
+{% block content %}
+
+    <h2>{{ request.user.username }}'s Account</h2>
+    <hr>
+    {% if member %}
+        {% if member.verified %}
+            <p>
+                Discord Account:
+            </p>
+        {% else %}
+            <p>
+                Discord Account (Pending):
+            </p>
+        {% endif %}
+    {% else %}
+        <p>
+            It looks like you haven't linked your account to your Discord account!
+            If you want to use most of the features here, you'll need to do that.
+        </p>
+        {% endif %}
+    <form class="form-inline">
+        {% if member %}
+            <fieldset disabled>
+        {% endif %}
+        <div class="input-group">
+            <div class="input-group-addon">@</div>
+            <input type="text" class="form-control" id="username" placeholder="{% if member %}{{member.username}}{% else %}Guy#0000{% endif %}">
+        </div>
+        {% if member %}
+            </fieldset>
+        {% else %}
+            <button action="submit" class="btn btn-primary">Submit</button>
+        {% endif %}
+    </form>
+    <hr>
+    {% if member and member.verified %}
+        <a href='{% url 'public:logs' %}?user={{member.username | safe}}'>View mod logs related to you</a>
+    {% endif %}
+{% endblock %}

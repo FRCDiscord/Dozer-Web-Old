@@ -1,14 +1,22 @@
 from django.conf.urls import url
-from .views import logs, basic, api
+from .views import logs, basic, api, auth, mail
 
 app_name = 'public'
 
 urlpatterns = [
     url(r'^about/$', basic.about, name='about'),
     url(r'^rankings/$', basic.rankings, name='rankings'),
-    url(r'^mod-logs/search/$', logs.search_logs, name='logs_search'),
+    url(r'^account/$', basic.account, name='account'),
+    url(r'^$', basic.index, name='index'),
+
+    url(r'^log-in/$', auth.login_or_register, name='login'),
+    url(r'^log-out/$', auth.logout_view, name='logout'),
+
     url(r'^mod-logs/$', logs.mod_logs, name='logs'),
+    url(r'^mod-logs/search/$', logs.search_logs, name='logs_search'),
+
+    url(r'^mod-mail/$', mail.mail, name='mail'),
+
     url(r'^api/logs/get/$', api.get_logs, name='get_log'),
-    url(r'^api/logs/add/$', api.create_log, name='log_create'),
-    url(r'^$', basic.index, name='index')
+    url(r'^api/logs/add/$', api.create_log, name='log_create')
 ]
