@@ -4,6 +4,7 @@
     <div class="card-deck">
         <div class="card">
             <div class="card-body">
+                <div id="login_warning" class="alert alert-danger"></div>
                 <h4 class="card-title">Log In</h4>
                 <form action="{% url 'public:login' %}" onsubmit="return validate_login()" method="POST">
                     {% csrf_token %}
@@ -22,6 +23,7 @@
         </div>
         <div class="card">
             <div class="card-body">
+                <div id="reg_warning" class="alert alert-danger"></div>
                 <h4 class="card-title">Register</h4>
                 <form action="{% url 'public:login' %}" onsubmit="return validate_register()" method="POST">
                     {% csrf_token %}
@@ -44,9 +46,15 @@
         </div>
     </div>
     <script>
+
+        $(document).ready(function() {
+            $("#login_warning").hide();
+            $("#reg_warning").hide();
+        });
+
         function validate_login() {
             if (!$("#username").val() || !$("#password").val()) {
-                alert("Please enter a username and password")
+                login_warning("Whoa there! Make sure to fill all the fields out.")
                 return false
             }
             return true
@@ -54,14 +62,24 @@
 
         function validate_register() {
             if (!$("#r_username").val() || !$("#r_password").val()) {
-                alert("Please enter a username and password")
+                reg_warning("Whoa there! Make sure to fill all the fields out.")
                 return false
             }
             if ($("#r_password").val() != $("#r_password_verify").val()) {
-                alert("Passwords do not match")
+                reg_warning("Uh oh! Your passwords didn't match. Try again.")
                 return false
             }
             return true
+        }
+
+        function login_warning(text) {
+            $("#login_warning").text(text)
+            $("#login_warning").show()
+        }
+
+        function reg_warning(text) {
+            $("#reg_warning").text(text)
+            $("#reg_warning").show()
         }
     </script>
 {% endblock %}
