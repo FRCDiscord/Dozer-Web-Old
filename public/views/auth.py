@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 def logout_view(request):
     logout(request)
-    # TODO: redirect to a successfully logged-out page
     dest = redirect('public:index')
     dest['Location'] += "?logout"
     return dest
