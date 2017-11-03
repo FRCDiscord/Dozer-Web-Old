@@ -3,7 +3,20 @@ from ..models import Member
 import requests
 
 def index(request):
-    return render(request, "public/index.html", {})
+    data = request.GET
+    toast = None
+    if 'login' in data:
+        toast = {
+            "text": "<strong>Logged in!</strong>",
+            "type": "primary"
+        }
+    if 'logout' in data:
+        toast = {
+            "text": "<strong>Logged out.</strong>",
+            "type": "primary"
+        }
+
+    return render(request, "public/index.html", {"toast": toast})
 
 # TODO: Auto-generate staff info or manually design?
 def about(request):

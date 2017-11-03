@@ -29,7 +29,7 @@ ALLOWED_HOSTS = [
 ]
 
 if DEBUG:
-    ALLOWED_HOSTS.append('192.168.1.169')
+    ALLOWED_HOSTS.append('192.168.1.215')
     ALLOWED_HOSTS.append('50.88.182.135')
 
 

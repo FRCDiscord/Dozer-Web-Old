@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 def logout_view(request):
     logout(request)
     # TODO: redirect to a successfully logged-out page
-    return redirect('public:index')
+    dest = redirect('public:index')
+    dest['Location'] += "?logout"
+    return dest
 
 def login_or_register(request):
     if request.method == 'GET':
@@ -18,8 +20,9 @@ def login_or_register(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                # TODO: redirect to successfully logged-in page
-                return redirect('public:index')
+                dest = redirect('public:index')
+                dest['Location'] += "?login"
+                return dest
             else:
                 return render(request, "public/login_register.html", {
                     "error": "Login Error: Invalid login credentials."
@@ -29,8 +32,9 @@ def login_or_register(request):
                 user = User.objects.create_user(username, None, password)
                 user.save()
                 login(request, user)
-                # TODO: redirect to successfully logged-in page
-                return redirect('public:index')
+                dest = redirect('public:index')
+                dest['Location'] += "?login"
+                return dest
             except:
                 return render(request, "public/login_register.html", {
                     "error": "Registration Error: Username taken. Perhaps you meant to log in?"
