@@ -5,11 +5,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.conf import settings
-from ..models import UserInfo, Server
+from ..models import UserInfo, Server, Member
 
 
 def logout_view(request, server_id):
-    logout(request)
+    logout(request, request.user)
     dest = redirect('public:index', server_id)
     dest['Location'] += "?logout"
     return dest
@@ -63,6 +63,8 @@ def discord(request):
     state = data['state']
     code = data['code']
 
+    print("code: " + code + ", state: " + state)
+
     res = exchange_code(request, code)
     token = res['access_token']
 
@@ -74,15 +76,28 @@ def discord(request):
 
     username = res['username']
     discriminator = res['discriminator']
-    acc = username + "#" + discriminator
-    try:
+    acc = res['id']
+    try: # Find existing user and info
         user = User.objects.get(username=acc)
-    except:
+        info = UserInfo.get(user)
+    except: # Create new user and info object
         user = User.objects.create_user(acc, None, None)
         user.save()
         info = UserInfo(user=user, discord=True, avatar=res['avatar'])
         info.save()
+
+    # Update username and discrim in case the user has changed it
+    user.first_name = username
+    user.last_name = discriminator
+    user.save()
     login(request, user)
+
+    # Update the member object's username and discrim too
+    try:
+        member = Member.getMember(user=user, server=Server.get(state))
+        member.username = info.display()
+    except:
+        pass
 
     dest = redirect('public:index', state)
     dest['Location'] += "?login"

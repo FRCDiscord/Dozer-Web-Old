@@ -1,0 +1,32 @@
+{% extends "public/server_base.html" %}
+
+{% block title %}Staff - {{ server.name }}{% endblock %}
+{% block content %}
+    <h2>Server Staff Dashboard</h2>
+    <div class="container">
+        <div class="list-group col-lg-7 offset-lg-5">
+            <h5>Unresolved Mail and Appeals:</h5>
+            <div class="list-group">
+                {% for mail in all_mail %}
+                    <a data-toggle="collapse" href="#mail_{{ mail.id }}"
+                       class="list-group-item list-group-item-action">
+                        <span><strong>Mail: </strong> {{ mail.subject }} <span
+                                class="text-muted">(from {{ mail.sender }})</span></span>
+                        {% if not mail.read %}
+                            <span class="badge badge-danger">Unread</span>
+                        {% endif %}
+                        <div class="collapse" id="mail_{{ mail.id }}">
+                            <hr>
+                            <p>
+                                {{ mail.content }}
+                            </p>
+                            <button class="btn btn-primary btn-sm">Mark As Read</button>
+                            <button class="btn btn-primary btn-sm">Send Response</button>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

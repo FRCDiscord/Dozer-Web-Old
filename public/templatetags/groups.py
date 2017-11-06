@@ -1,14 +1,18 @@
 from django import template
-from django.contrib.auth.models import Group
-from ..models import UserInfo
+from ..models import Member, Server
 
 register = template.Library()
 
-@register.filter(name='has_group')
-def has_group(user, group_name):
-    group = Group.objects.get(name=group_name)
-    return group in user.groups.all()
+@register.assignment_tag(name='staff_check')
+def staff_check(user, server_id):
+    server = Server.get(server_id)
+    mem = Member.getMember(user=user, server=server)
+    if mem:
+        return mem.staff
+    else:
+        return False
 
-@register.filter(name='info')
-def info(user):
-    return UserInfo.get(user)
+
+@register.assignment_tag(name='false')
+def false():
+    return False

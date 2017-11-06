@@ -16,18 +16,27 @@ class UserInfo(models.Model):
     avatar = models.CharField(max_length=70, null=False, blank=True)
 
     def __str__(self):
-        return self.user.username + "'s info"
+        return self.display() + "'s info"
 
     def get(user):
-        try:
-            info = UserInfo.objects.get(user=user)
-        except:
-            info = UserInfo(user=user)
-            info.save()
-        return info
+        if user:
+            try:
+                info = UserInfo.objects.get(user=user)
+            except:
+                info = UserInfo(user=user)
+                info.save()
+            return info
+        else:
+            return None
 
     def is_discord(user):
         return UserInfo.get(user).discord
+
+    def display(self):
+        if self.discord:
+            return self.user.first_name + "#" + self.user.last_name
+        else:
+            return self.user.username
 
 
 class Server(models.Model):
@@ -51,6 +60,7 @@ class Member(models.Model):
     name = models.CharField(max_length=50, null=True)
     staff = models.BooleanField(null=False, default=False)
     account = models.ForeignKey(User, null=True)
+    server = models.ForeignKey(Server, null=False)
 
     def display(self):
         if self.name:
@@ -63,19 +73,20 @@ class Member(models.Model):
         else:
             return self.username
 
-    def getMember(username=None, user=None):
+    def getMember(server, username=None, user=None):
         if username is not None:
             try:
-                member = Member.objects.get(username=username)
+                member = Member.objects.get(username=username, server=server)
             except:
-                member = Member(username=username)
+                member = Member(username=username, server=server)
                 member.save()
             return member
         elif user is not None and UserInfo.get(user).discord:
             try:
-                member = Member.objects.get(account=user)
+                member = Member.objects.get(account=user, server=server)
             except:
-                member = Member(username=user.username, account=user)
+                info = UserInfo.get(user)
+                member = Member(username=info.display(), account=user, server=server)
                 member.save()
             return member
         else:
@@ -93,6 +104,12 @@ class Punishment(models.Model):
 
 
 class Log(models.Model):
+    decision_choices = (
+        ("manual", "manual"),
+        ("progression", "progression")
+    )
+    id = models.IntegerField(primary_key=True)
+    type_decision = models.CharField(max_length=10, blank=False, choices=decision_choices, default="manual")
     punished = models.ForeignKey(Member, related_name="user_punished",null=False)
     reason = models.TextField(max_length=500, null=False, default="Unknown")
     punishment = models.ForeignKey(Punishment, null=False)
@@ -147,6 +164,15 @@ class Log(models.Model):
     def progress_percent_rounded(self):
         return int(round(self.progress_percent(), 0))
 
+
+class Mail(models.Model):
+    sender = models.CharField(max_length=50, blank=False)
+    subject = models.CharField(max_length=100, blank=False)
+    content = models.TextField(max_length=2000, blank=False)
+    server = models.ForeignKey(Server, null=False)
+
+    user = models.ForeignKey(UserInfo, null=True)
+    read = models.BooleanField(default=False)
 
 class APIToken(models.Model):
     token = models.CharField(max_length=50, null=False, primary_key=True)

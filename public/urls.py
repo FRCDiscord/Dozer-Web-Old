@@ -1,11 +1,10 @@
 from django.conf.urls import url
-from .views import logs, basic, api, auth, mail
+from .views import logs, basic, api, auth, mail, serverstaff
 
 app_name = 'public'
 
 urlpatterns = [
 
-    # TODO: make all of these take a server ID "(?P<server_id>[0-9]+)"
     url(r'^(?P<server_id>[0-9]+)/about/$', basic.about, name='about'),
     url(r'^(?P<server_id>[0-9]+)/rankings/$', basic.rankings, name='rankings'),
     url(r'^(?P<server_id>[0-9]+)/account/$', basic.account, name='account'),
@@ -16,6 +15,9 @@ urlpatterns = [
     url(r'^(?P<server_id>[0-9]+)/mod-logs/search/$', logs.search_logs, name='logs_search'),
 
     url(r'^(?P<server_id>[0-9]+)/mod-mail/$', mail.mail, name='mail'),
+    url(r'^(?P<server_id>[0-9]+)/mod-mail/send/$', mail.mail_receive, name='mail_receive'),
+
+    url(r'^(?P<server_id>[0-9]+)/staff/$', serverstaff.staff_index, name='staff_index'),
 
     url(r'^(?P<server_id>[0-9]+)/log-in/$', auth.login_or_register, name='login'),
     url(r'^(?P<server_id>[0-9]+)/log-out/$', auth.logout_view, name='logout'),

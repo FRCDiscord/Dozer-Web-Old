@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from ..models import Member, Log, Server
+from django.http import JsonResponse
+from ..models import Member, Log, Server, Mail, UserInfo
 
 def mail(request, server_id):
     data = request.GET
@@ -9,7 +10,7 @@ def mail(request, server_id):
     subject_class_add = ""
     appeal = None
     try:
-        member = Member.objects.get(account=request.user)
+        member = Member.getMember(user=request.user)
         prefill_name = member.username
         name_class_add = "disabled"
     except:
@@ -41,3 +42,22 @@ def mail(request, server_id):
         "server": Server.get(server_id)
     }
     return render(request, "public/modmail.html", ctx)
+
+def mail_receive(request, server_id):
+    if request.method == 'POST':
+        data = request.POST
+        user = None
+        if request.user.is_authenticated:
+            user = request.user
+        mail = Mail(sender=data['sender'],
+                    subject=data['subject'],
+                    content=data['content'],
+                    user=user,
+                    server=Server.get(server_id))
+        mail.save()
+        # TODO: toast/notification of success
+        return redirect("public:mail", server_id)
+    else:
+        return JsonResponse({
+            "error": "This is used via POST."
+        })

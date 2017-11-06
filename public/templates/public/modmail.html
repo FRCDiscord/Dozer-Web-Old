@@ -10,11 +10,12 @@
             through here!
         </p>
     {% endif %}
-    <form>
+    <form action="{% url "public:mail_receive" server_id=server.id %}" method="POST">
+        {% csrf_token %}
         <fieldset {{name_class_add}}>
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Jerry" value="{{prefill_name}}">
+                <input type="text" class="form-control" id="name" name="sender" maxlength="50" placeholder="Jerry" value="{{prefill_name}}">
                 {% if not appeal %}
                     <small class="form-text text-muted">
                         We only ask for your name so that we can contact you if we have any questions.
@@ -29,12 +30,12 @@
         <fieldset {{subject_class_add}}>
             <div class="form-group">
                 <label for="name">Subject</label>
-                <input type="text" class="form-control" id="subject" placeholder="I am concerned about..." value="{{prefill_subject}}">
+                <input type="text" class="form-control" id="subject" name="subject" maxlength="100" placeholder="I am concerned about..." value="{{prefill_subject}}">
             </div>
         </fieldset>
         <div class="form-group">
             <label for="name">Content</label>
-            <textarea class="form-control" id="text" rows="6"></textarea>
+            <textarea class="form-control" id="text" name="content" rows="6" maxlength="2000"></textarea>
         </div>
         <button class="btn btn-primary" action="submit">Send</button>
     </form>

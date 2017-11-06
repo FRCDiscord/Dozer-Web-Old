@@ -2,8 +2,8 @@
     <thead class="thead-dark">
     <tr>
         <th scope="col">User</th>
-        <th scope="col">Reason</th>
         <th scope="col">Action</th>
+        <th scope="col">Reason</th>
         <th scope="col">Responsible Staff</th>
         <th scope="col">Time</th>
         {% if request.user.is_authenticated %}
@@ -15,7 +15,6 @@
     {% for log in logs %}
         <tr>
             <td><a onclick="recipient('{{log.punished.username}}')" href="javascript:void(0);">{{log.punished.username}}</a></td>
-            <td>{{ log.reason }}</td>
             <td>
                 {{ log.punishment.name }}<br>
                 {% if log.punishment.timeInHours > 0 %}
@@ -27,11 +26,12 @@
                     </div>
                 {% endif %}
             </td>
+            <td>{{ log.reason }}</td>
             <td><a onclick="staff('{{ log.staff.display }}')" href="javascript:void(0);">{{ log.staff.display }}</a>
             </td>
             <td>{{ log.actionTime }}</td>
             {% if request.user.is_authenticated %}
-                {% if log.punished.account == request.user and log.punished.verified %}
+                {% if log.punished.account == request.user %}
                     {% if log.can_appeal %}
                         <td><a href="{{log.appeal_url | safe}}">Appeal</a></td>
                     {% else %}

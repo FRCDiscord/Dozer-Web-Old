@@ -50,10 +50,11 @@ def rankings(request, server_id):
 
 def account(request, server_id):
     if request.user.is_authenticated:
+        server = Server.get(server_id)
         return render(request, "public/account.html", {
             "info": UserInfo.get(request.user),
-            "member": Member.getMember(user=request.user),
-            "server": Server.get(server_id)
+            "member": Member.getMember(user=request.user, server=server),
+            "server": server
         })
     else:
         return redirect("public:index", server_id)
