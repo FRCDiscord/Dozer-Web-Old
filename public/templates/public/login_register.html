@@ -1,5 +1,6 @@
-{% extends "public/server_base.html" %}
+{% extends "public/base.html" %}
 
+{% block title %}Log In / Register - Dozer{% endblock %}
 {% block content %}
     <div class="card-deck">
         <div class="card">
@@ -60,11 +61,8 @@
         </div>
     </div>
     <script>
-
-        $(document).ready(function() {
-            $("#login_warning").hide();
-            $("#reg_warning").hide();
-        });
+        $("#login_warning").hide();
+        $("#reg_warning").hide();
 
         function validate_login() {
             if (!$("#username").val() || !$("#password").val()) {

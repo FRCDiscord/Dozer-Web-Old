@@ -70,6 +70,7 @@ class Member(models.Model):
             except:
                 member = Member(username=username)
                 member.save()
+                print("made a member")
             return member
         elif user is not None and UserInfo.get(user).discord:
             try:
@@ -77,13 +78,14 @@ class Member(models.Model):
             except:
                 member = Member(username=user.username, account=user)
                 member.save()
+                print("made a member via user")
             return member
         else:
             return None
 
 
 class Punishment(models.Model):
-    key = models.CharField(max_length=30, primary_key=True)
+    key = models.CharField(max_length=30)
     name = models.TextField(max_length=100, null=False, blank=False)
     timeInHours = models.IntegerField(default=0)
     appealWaitHours = models.IntegerField(default=0)

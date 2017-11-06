@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q, F
-from public.models import Log, Member, Punishment, APIToken
+from public.models import Log, Member, Punishment, APIToken, Server
 
 # TODO: rate limit
 def handle(request, type):
@@ -19,6 +19,7 @@ def handle(request, type):
                 apitoken = APIToken.objects.get(token=data['token'])
                 apitoken.uses = F('uses') + 1
                 apitoken.save()
+                #print(str(data))
                 return None
             except:
                 return JsonResponse({
@@ -34,7 +35,7 @@ def handle(request, type):
     else:
         return JsonResponse({
             "success": False,
-            "error": "This is used via " + other + " only."
+            "error": "This is used via " + type + " only."
         })
 
 def handlePOST(request):
@@ -67,19 +68,20 @@ def get_logs(request):
 
 @csrf_exempt
 def create_log(request):
+    print("LOG POST")
     error = handlePOST(request)
+    print("handled")
     if error == None:
         data = request.POST
-        punished = Member.getUser(data['punished'])
-        staff = Member.getUser(data['staff'])
-        staff.staff = True
-        staff.save()
-        punishment = Punishment.objects.get(key=data['punishment'])
+        punished = Member.getMember(username=data['user'])
+        staff = Member.getMember(username=data['punisher'])
+        punishment = Punishment.objects.get(key=data['type'])
         log = Log(
             punished=punished,
             reason=data['reason'],
             punishment=punishment,
-            staff=staff
+            staff=staff,
+            server=Server.get(data['server'])
         )
         log.save()
         return JsonResponse({
