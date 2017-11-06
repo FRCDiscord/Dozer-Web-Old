@@ -19,7 +19,6 @@ def handle(request, type):
                 apitoken = APIToken.objects.get(token=data['token'])
                 apitoken.uses = F('uses') + 1
                 apitoken.save()
-                #print(str(data))
                 return None
             except:
                 return JsonResponse({
@@ -68,9 +67,7 @@ def get_logs(request):
 
 @csrf_exempt
 def create_log(request):
-    print("LOG POST")
     error = handlePOST(request)
-    print("handled")
     if error == None:
         data = request.POST
         punished = Member.getMember(username=data['user'])

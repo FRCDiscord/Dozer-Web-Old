@@ -70,7 +70,6 @@ class Member(models.Model):
             except:
                 member = Member(username=username)
                 member.save()
-                print("made a member")
             return member
         elif user is not None and UserInfo.get(user).discord:
             try:
@@ -78,7 +77,6 @@ class Member(models.Model):
             except:
                 member = Member(username=user.username, account=user)
                 member.save()
-                print("made a member via user")
             return member
         else:
             return None
