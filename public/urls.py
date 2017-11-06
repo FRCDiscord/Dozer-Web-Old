@@ -5,6 +5,9 @@ app_name = 'public'
 
 urlpatterns = [
 
+    # TODO: main 'dozer' site pages
+    #url(r'^$', basic.index, name='index'),
+
     # TODO: make all of these take a server ID "(?P<server_id>[0-9]+)"
     url(r'^about/$', basic.about, name='about'),
     url(r'^rankings/$', basic.rankings, name='rankings'),

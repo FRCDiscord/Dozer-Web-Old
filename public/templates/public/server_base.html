@@ -1,0 +1,54 @@
+{% extends 'public/base.html' %}
+
+{% load static %}
+{% load groups %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1d9759;">
+    <a class="navbar-brand" href="{% url 'public:index' server_id=server_id %}">
+        <img src="{% static 'public/logo.svg' %}" width="40" height=auto class="d-inline-block align-top rounded-circle">
+        The FRC Discord <span class="badge badge-danger">Alpha</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'public:about' %}">About Us</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'public:rankings' %}">Rankings</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'public:logs' %}">Mod Logs</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'public:mail' %}">Mod Mail</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-md-auto d-none d-md-flex">
+            {% if request.user.is_authenticated and False %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'public:index' server_id %}">Staff <span id="staff_notifs" class="badge badge-danger">2</span></a>
+                </li>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'public:account' %}">Account</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'public:logout' %}">Log Out</a>
+                </li>
+            {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'public:login' %}">Log In</a>
+                </li>
+            {% endif %}
+    </ul>
+
+    </div>
+</nav>
+{% endblock %}
