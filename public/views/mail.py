@@ -10,7 +10,7 @@ def mail(request, server_id):
     subject_class_add = ""
     appeal = None
     try:
-        member = Member.getMember(user=request.user)
+        member = Member.getMember(user=request.user,server=Server.get(server_id))
         prefill_name = member.username
         name_class_add = "disabled"
     except:

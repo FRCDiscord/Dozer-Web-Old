@@ -9,7 +9,7 @@ from ..models import UserInfo, Server, Member
 
 
 def logout_view(request, server_id):
-    logout(request, request.user)
+    logout(request)
     dest = redirect('public:index', server_id)
     dest['Location'] += "?logout"
     return dest
@@ -56,14 +56,12 @@ def login_or_register(request, server_id):
 
         return redirect('public:index')
 
-API_ENDPOINT = "https://discordapp.com/api/v6"
+API_ENDPOINT = "https://discordapp.com/api"
 
 def discord(request):
     data = request.GET
     state = data['state']
     code = data['code']
-
-    print("code: " + code + ", state: " + state)
 
     res = exchange_code(request, code)
     token = res['access_token']
@@ -111,6 +109,7 @@ def exchange_code(request, code):
         'code': code,
         'redirect_uri': request.build_absolute_uri(reverse('public:discord_auth'))
     }
+    print("Data: " + str(data))
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }

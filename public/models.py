@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 def get_random_32_string():
     return get_random_string(length=32)
 
-
+# TODO: move staff boolean here and out of member
 class UserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     discord = models.BooleanField(null=False, default=False)
