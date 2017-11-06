@@ -1,6 +1,12 @@
+import requests
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.conf import settings
+from ..models import UserInfo
+
 
 def logout_view(request):
     logout(request)
@@ -10,7 +16,11 @@ def logout_view(request):
 
 def login_or_register(request):
     if request.method == 'GET':
-        return render(request, "public/login_register.html", {})
+        discord_url = "https://discordapp.com/oauth2/authorize?response_type=code&client_id=%s&scope=identify&state=todo&redirect_uri=" % settings.DISCORD_CLIENT_ID
+        discord_url += request.build_absolute_uri(reverse('public:discord_auth'))
+        return render(request, "public/login_register.html", {
+            "discord_url": discord_url
+        })
     else:
         data = request.POST
         username = data['username']
@@ -30,7 +40,11 @@ def login_or_register(request):
             try:
                 user = User.objects.create_user(username, None, password)
                 user.save()
+                info = UserInfo(user=user, discord=False)
+                info.save()
                 login(request, user)
+
+
                 dest = redirect('public:index')
                 dest['Location'] += "?login"
                 return dest
@@ -40,3 +54,50 @@ def login_or_register(request):
                 })
 
         return redirect('public:index')
+
+API_ENDPOINT = "https://discordapp.com/api/v6"
+
+def discord(request):
+    data = request.GET
+    state = data['state'] # TODO: validify state
+    code = data['code']
+
+    res = exchange_code(request, code)
+    token = res['access_token']
+
+    headers = {
+        'Authorization': 'Bearer %s' % token
+    }
+    r = requests.get('%s/users/@me' % API_ENDPOINT, headers=headers)
+    res = json.loads(r.text)
+
+    username = res['username']
+    discriminator = res['discriminator']
+    acc = username + "#" + discriminator
+    try:
+        user = User.objects.get(username=acc)
+    except:
+        user = User.objects.create_user(acc, None, None)
+        user.save()
+        info = UserInfo(user=user, discord=True, avatar=res['avatar'])
+        info.save()
+    login(request, user)
+
+    dest = redirect('public:index')
+    dest['Location'] += "?login"
+    return dest
+
+def exchange_code(request, code):
+    data = {
+        'client_id': settings.DISCORD_CLIENT_ID,
+        'client_secret': settings.DISCORD_CLIENT_SECRET,
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': request.build_absolute_uri(reverse('public:discord_auth'))
+    }
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    r = requests.post('%s/oauth2/token' % API_ENDPOINT, data, headers)
+    r.raise_for_status()
+    return r.json()

@@ -32,6 +32,11 @@ if DEBUG:
     ALLOWED_HOSTS.append('192.168.1.215')
     ALLOWED_HOSTS.append('50.88.182.135')
 
+DISCORD_CLIENT_ID = ""
+DISCORD_CLIENT_SECRET = ""
+if DEBUG:
+    DISCORD_CLIENT_ID = "369527201479000068"
+    DISCORD_CLIENT_SECRET = "[redacted]"
 
 # Application definition
 

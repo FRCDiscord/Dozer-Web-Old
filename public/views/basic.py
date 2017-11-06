@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from ..models import Member
+from ..models import Member, UserInfo
 import requests
 
-def index(request):
+def index(request, server_id):
     data = request.GET
+
     toast = None
     if 'login' in data:
         toast = {
@@ -16,7 +17,11 @@ def index(request):
             "type": "primary"
         }
 
-    return render(request, "public/index.html", {"toast": toast})
+
+    return render(request, "public/index.html", {
+        "toast": toast,
+        "server_id": server_id
+    })
 
 # TODO: Auto-generate staff info or manually design?
 def about(request):
@@ -40,12 +45,8 @@ def rankings(request):
 
 def account(request):
     if request.user.is_authenticated:
-        try:
-            member = Member.objects.get(account=request.user)
-        except:
-            member = None
         return render(request, "public/account.html", {
-            "member": member
+            "info": UserInfo.get(request.user)
         })
     else:
         return redirect("public:index")

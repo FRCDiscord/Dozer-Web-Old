@@ -4,15 +4,44 @@ from datetime import datetime, timezone, timedelta
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+
 def get_random_32_string():
     return get_random_string(length=32)
 
+
+class UserInfo(models.Model):
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+    discord = models.BooleanField(null=False, default=False)
+    avatar = models.CharField(max_length=50, null=False, blank=True)
+
+    def __str__(self):
+        return self.user.username + "'s info"
+
+    def get(user):
+        try:
+            info = UserInfo.objects.get(user=user)
+        except:
+            info = UserInfo(user=user)
+            info.save()
+        return info
+
+    def is_discord(user):
+        return UserInfo.get(user).discord
+
+
+class Server(models.Model):
+    id = models.CharField(primary_key=True, max_length=50)
+    name = models.CharField(max_length=50, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+
+
 class Member(models.Model):
-    username = models.CharField(max_length=50, primary_key=True)
+    username = models.CharField(max_length=50)
     name = models.CharField(max_length=50, null=True)
     staff = models.BooleanField(null=False, default=False)
     account = models.ForeignKey(User, null=True)
-    verified = models.BooleanField(default=False)
 
     def display(self):
         if self.name:
@@ -45,7 +74,6 @@ class Punishment(models.Model):
 
 
 class Log(models.Model):
-    key = models.CharField(primary_key=True, max_length=32, default=get_random_32_string)
     punished = models.ForeignKey(Member, related_name="user_punished",null=False)
     reason = models.TextField(max_length=500, null=False, default="Unknown")
     punishment = models.ForeignKey(Punishment, null=False)
@@ -99,6 +127,7 @@ class Log(models.Model):
     def progress_percent_rounded(self):
         return int(round(self.progress_percent(), 0))
 
+
 class APIToken(models.Model):
     token = models.CharField(max_length=50, null=False, primary_key=True)
     name = models.CharField(max_length=50, null=False, blank=True)
@@ -108,10 +137,17 @@ class APIToken(models.Model):
         return 'Token "' + self.name + '"'
 
     def generateToken(name):
+        tok = ""
+        while True:
+            tok = get_random_string(length=32)
+            try:
+                APIToken.objects.get(token=tok)
+            except:
+                break
+
         newToken = APIToken(
-            token=get_random_string(length=32),
+            token=tok,
             name=name
         )
         newToken.save()
         return newToken
-

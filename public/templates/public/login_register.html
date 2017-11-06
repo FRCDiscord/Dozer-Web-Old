@@ -19,12 +19,26 @@
                     <input type="text" name="type" value="login" style="display: none;">
                     <button type="submit" class="btn btn-primary">Log In</button>
                 </form>
+                <hr>
+                <p>
+                    Alternatively, you can sign in through your Discord account.
+                </p>
+                <a class="btn btn-dark" href="{{discord_url}}">
+                    Log In With <img width=auto height=20px style="margin-bottom: 4px;" src="https://discordapp.com/assets/93608abbd20d90c13004925014a9fd01.svg">
+                </a>
             </div>
         </div>
         <div class="card">
             <div class="card-body">
                 <div id="reg_warning" class="alert alert-danger"></div>
                 <h4 class="card-title">Register</h4>
+                <p>
+                    A lot of the features here require you to be logged in through
+                    your Discord account, so we <strong>really recommend</strong> logging
+                    in through Discord instead. If not, you can make an account seperate
+                    from your Discord account below.
+                </p>
+                <hr>
                 <form action="{% url 'public:login' %}" onsubmit="return validate_register()" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
