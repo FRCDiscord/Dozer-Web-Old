@@ -3,34 +3,42 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from public.models import Log
+from public.models import Log, Server, Member
 
 PAGE_LENGTH = 10
 
 @csrf_exempt
-def mod_logs(request):
+def mod_logs(request, server_id):
     data = request.GET
-    user = ""
-    staff= ""
+    user = None
+    staff = None
     if 'user' in data:
-        user = data['user']
+        try:
+            user = Member.objects.get(id=data['user'])
+        except:
+            pass
+
     if 'staff' in data:
-        staff = data['staff']
+        try:
+            staff = Member.objects.get(id=data['staff'])
+        except:
+            pass
     return render(request, "public/logs.html", {
         "logs": Log.objects.all(),
         "user": user,
-        "staff": staff
+        "staff": staff,
+        "server": Server.get(server_id)
     })
 
 @csrf_exempt
-def search_logs(request):
+def search_logs(request, server_id):
     if request.method == 'GET':
         return JsonResponse({
             "error": "This is used via POST only."
         })
     else:
         data = request.POST
-        q = Q()
+        q = Q(server__id = server_id)
         if 'punished_user' in data:
             q = Q(punished__username = data['punished_user'])
 

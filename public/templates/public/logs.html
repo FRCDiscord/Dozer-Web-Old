@@ -19,7 +19,7 @@
                         <div class="input-group">
                             <div class="input-group-addon">@</div>
 
-                            <input type="text" class="form-control dropdown-toggle" id="punish_user" data-toggle="dropdown" placeholder="User#0000" value="{{user}}">
+                            <input type="text" class="form-control dropdown-toggle" id="punish_user" data-toggle="dropdown" placeholder="User#0000" value="{{user.username}}">
                             <!--<div id="user_dropdown" class="dropdown-menu">
                                 <a class="dropdown-item" href="#">H2O2O#4444</a>
                                 <a class="dropdown-item" href="#">Ornamus#3164</a>
@@ -68,7 +68,7 @@
             if (staff_user !=undefined && staff_user != "") {
                 sendData['staff_user'] = staff_user
             }
-            $.post("{% url 'public:logs_search' %}", sendData).done(function(data){
+            $.post("{% url 'public:logs_search' server_id=server.id %}", sendData).done(function(data){
                 //console.log(data)
                 pages = data.pages
                 if (data.pageCount > 1) {

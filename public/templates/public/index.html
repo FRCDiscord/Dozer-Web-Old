@@ -1,7 +1,7 @@
 {% extends "public/server_base.html" %}
 
 {% block content %}
-    <h2>The FRC Discord</h2>
+    <h2>{{server.name}}</h2>
     <div class="row">
         <div class="col-8 col-sm-7 col-md-5 col-lg-3" style="margin-bottom: 10px;">
             <div class="card">
@@ -15,9 +15,11 @@
                         <br>
                         9,001 riots dealt with
                         </p>
-                        <a class="btn btn-primary btn-block" href="https://discord.gg/frc" target="_blank">
-                            Join Us!
-                        </a>
+                        {% if server.invite %}
+                            <a class="btn btn-primary btn-block" href="https://discord.gg/frc" target="_blank">
+                                Join Us!
+                            </a>
+                        {% endif %}
                     </p>
                 </div>
             </div>

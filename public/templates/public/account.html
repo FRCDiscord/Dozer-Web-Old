@@ -4,7 +4,13 @@
 
     <h2>{{ request.user.username }}'s Account</h2>
     <hr>
-    {% if not info.discord %}
+    {% if info.discord %}
+        <p>
+            Welcome to your account page! Here you can manage all sorts of
+            settings and see a bunch of cool stuff that <i>hasn't been designed
+            or thought of yet.</i>
+        </p>
+    {% else %}
         <p>
             It looks like you aren't logged in through Discord!
             If you want to use most of the features here, you'll need to migrate
@@ -13,7 +19,7 @@
         ...too bad that feature isn't done yet. ¯\_(ツ)_/¯
     {% endif %}
     <hr>
-    {% if member and member.verified %}
-        <a href='{% url 'public:logs' %}?user={{member.username | safe}}'>View mod logs related to you</a>
+    {% if member %}
+        <a href='{% url 'public:logs' server_id=server.id %}?user={{member.id}}'>View mod logs related to you</a>
     {% endif %}
 {% endblock %}

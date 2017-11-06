@@ -5,21 +5,22 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.conf import settings
-from ..models import UserInfo
+from ..models import UserInfo, Server
 
 
-def logout_view(request):
+def logout_view(request, server_id):
     logout(request)
-    dest = redirect('public:index')
+    dest = redirect('public:index', server_id)
     dest['Location'] += "?logout"
     return dest
 
-def login_or_register(request):
+def login_or_register(request, server_id):
     if request.method == 'GET':
-        discord_url = "https://discordapp.com/oauth2/authorize?response_type=code&client_id=%s&scope=identify&state=todo&redirect_uri=" % settings.DISCORD_CLIENT_ID
+        discord_url = "https://discordapp.com/oauth2/authorize?response_type=code&client_id=%s&scope=identify&state=%s&redirect_uri=" % (settings.DISCORD_CLIENT_ID, server_id)
         discord_url += request.build_absolute_uri(reverse('public:discord_auth'))
         return render(request, "public/login_register.html", {
-            "discord_url": discord_url
+            "discord_url": discord_url,
+            "server": Server.get(server_id)
         })
     else:
         data = request.POST
@@ -29,7 +30,7 @@ def login_or_register(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                dest = redirect('public:index')
+                dest = redirect('public:index', server_id)
                 dest['Location'] += "?login"
                 return dest
             else:
@@ -45,7 +46,7 @@ def login_or_register(request):
                 login(request, user)
 
 
-                dest = redirect('public:index')
+                dest = redirect('public:index', server_id)
                 dest['Location'] += "?login"
                 return dest
             except:
@@ -59,7 +60,7 @@ API_ENDPOINT = "https://discordapp.com/api/v6"
 
 def discord(request):
     data = request.GET
-    state = data['state'] # TODO: validify state
+    state = data['state']
     code = data['code']
 
     res = exchange_code(request, code)
@@ -83,7 +84,7 @@ def discord(request):
         info.save()
     login(request, user)
 
-    dest = redirect('public:index')
+    dest = redirect('public:index', state)
     dest['Location'] += "?login"
     return dest
 

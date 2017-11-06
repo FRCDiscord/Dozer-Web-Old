@@ -3,6 +3,7 @@ from django.utils.crypto import get_random_string
 from datetime import datetime, timezone, timedelta
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 
 
 def get_random_32_string():
@@ -10,9 +11,9 @@ def get_random_32_string():
 
 
 class UserInfo(models.Model):
-    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     discord = models.BooleanField(null=False, default=False)
-    avatar = models.CharField(max_length=50, null=False, blank=True)
+    avatar = models.CharField(max_length=70, null=False, blank=True)
 
     def __str__(self):
         return self.user.username + "'s info"
@@ -32,9 +33,17 @@ class UserInfo(models.Model):
 class Server(models.Model):
     id = models.CharField(primary_key=True, max_length=50)
     name = models.CharField(max_length=50, null=False, blank=False)
+    logo = models.CharField(max_length=80, null=True, default="https://discordapp.com/assets/1c8a54f25d101bdc607cec7228247a9a.svg")
+
+    color = models.CharField(max_length=10, null=True, default="#3f51b5")
+    invite = models.CharField(max_length=30, null=True)
 
     def __str__(self):
         return self.name
+
+    def get(id):
+        server = get_object_or_404(Server, id=id)
+        return server
 
 
 class Member(models.Model):
@@ -54,13 +63,23 @@ class Member(models.Model):
         else:
             return self.username
 
-    def getMember(username):
-        try:
-            member = Member.objects.get(username=username)
-        except:
-            member = Member(username=username)
-            member.save()
-        return member
+    def getMember(username=None, user=None):
+        if username is not None:
+            try:
+                member = Member.objects.get(username=username)
+            except:
+                member = Member(username=username)
+                member.save()
+            return member
+        elif user is not None and UserInfo.get(user).discord:
+            try:
+                member = Member.objects.get(account=user)
+            except:
+                member = Member(username=user.username, account=user)
+                member.save()
+            return member
+        else:
+            return None
 
 
 class Punishment(models.Model):
@@ -79,6 +98,7 @@ class Log(models.Model):
     punishment = models.ForeignKey(Punishment, null=False)
     staff = models.ForeignKey(Member, related_name="staff_punisher", null=False)
     actionTime = models.DateTimeField(auto_now_add=True)
+    server = models.ForeignKey(Server, null=False)
 
     def __str__(self):
         return self.staff.display() + " punished " + self.punished.username + " at " + str(self.actionTime)

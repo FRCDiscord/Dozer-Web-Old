@@ -20,7 +20,7 @@
                         We only ask for your name so that we can contact you if we have any questions.
                         {% if request.user.is_authenticated %}
                             If you'd <i>really</i> rather stay anonymous, you can
-                            <a href="{% url 'public:logout' %}">log out</a> first.
+                            <a href="{% url 'public:logout' server_id=server.id %}">log out</a> first.
                         {% endif %}
                     </small>
                 {% endif %}

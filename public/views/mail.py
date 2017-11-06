@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from ..models import Member, Log
+from ..models import Member, Log, Server
 
-def mail(request):
+def mail(request, server_id):
     data = request.GET
     prefill_name = ""
     name_class_add = ""
@@ -37,6 +37,7 @@ def mail(request):
         "prefill_subject": prefill_subject,
         "subject_class_add": subject_class_add,
         "appeal": appeal,
-        "error": error
+        "error": error,
+        "server": Server.get(server_id)
     }
     return render(request, "public/modmail.html", ctx)

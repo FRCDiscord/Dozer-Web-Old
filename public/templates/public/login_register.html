@@ -6,7 +6,7 @@
             <div class="card-body">
                 <div id="login_warning" class="alert alert-danger"></div>
                 <h4 class="card-title">Log In</h4>
-                <form action="{% url 'public:login' %}" onsubmit="return validate_login()" method="POST">
+                <form action="{% url 'public:login' server_id=server.id %}" onsubmit="return validate_login()" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="username">Username</label>
@@ -39,7 +39,7 @@
                     from your Discord account below.
                 </p>
                 <hr>
-                <form action="{% url 'public:login' %}" onsubmit="return validate_register()" method="POST">
+                <form action="{% url 'public:login' server_id=server.id %}" onsubmit="return validate_register()" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="username">Username</label>
