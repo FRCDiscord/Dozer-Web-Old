@@ -109,7 +109,6 @@ def exchange_code(request, code):
         'code': code,
         'redirect_uri': request.build_absolute_uri(reverse('public:discord_auth'))
     }
-    print("Data: " + str(data))
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }

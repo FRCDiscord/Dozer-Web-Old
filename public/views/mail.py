@@ -12,7 +12,7 @@ def mail(request, server_id):
     try:
         member = Member.getMember(user=request.user,server=Server.get(server_id))
         prefill_name = member.username
-        name_class_add = "disabled"
+        name_class_add = "readonly"
     except:
         member = None
 
@@ -20,7 +20,7 @@ def mail(request, server_id):
         try:
             appeal = Log.objects.get(key=data['appeal'])
             prefill_subject = appeal.appeal_subject()
-            subject_class_add = "disabled"
+            subject_class_add = "readonly"
         except Exception:
             appeal = None
 
@@ -46,9 +46,10 @@ def mail(request, server_id):
 def mail_receive(request, server_id):
     if request.method == 'POST':
         data = request.POST
+        #data = dict(data)
         user = None
         if request.user.is_authenticated:
-            user = request.user
+            user = UserInfo.get(request.user)
         mail = Mail(sender=data['sender'],
                     subject=data['subject'],
                     content=data['content'],
