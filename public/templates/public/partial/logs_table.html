@@ -17,7 +17,7 @@
             <td><a onclick="recipient('{{log.punished.username}}')" href="javascript:void(0);">{{log.punished.username}}</a></td>
             <td>
                 {{ log.punishment.name }}<br>
-                {% if log.punishment.timeInHours > 0 %}
+                {% if log.timeInHours > 0 %}
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
                              style="width: {{ log.progress_percent }}%">

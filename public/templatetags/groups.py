@@ -1,5 +1,6 @@
 from django import template
 from ..models import Member, Server
+import random
 
 register = template.Library()
 
@@ -16,3 +17,11 @@ def staff_check(user, server_id):
 @register.assignment_tag(name='false')
 def false():
     return False
+
+
+@register.assignment_tag(name='random_pic')
+def random_pic():
+    option_count = 5
+    option = random.randint(1, option_count)
+    result = "public/random/" + str(option) + ".jpg"
+    return result

@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from .views import logs, basic, api, auth, mail, serverstaff
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 app_name = 'public'
 
@@ -27,3 +28,6 @@ urlpatterns = [
     url(r'^api/logs/get/$', api.get_logs, name='get_log'),
     url(r'^api/logs/add/$', api.create_log, name='log_create')
 ]
+
+#urlpatterns += staticfiles_urlpatterns()
+

@@ -1,0 +1,14 @@
+{% extends "public/base.html" %}
+
+{% load groups %}
+{% load static %}
+
+{% block content %}
+    <h2 class="text-center">Server Error: 404</h2>
+    {% random_pic as pic %}
+    <div class="row">
+        <div class="col-lg-4" width=25% height=auto>
+            <img src="{% static pic %}">
+        </div>
+    </div>
+{% endblock %}

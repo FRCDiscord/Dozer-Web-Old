@@ -9,7 +9,6 @@ from django.shortcuts import get_object_or_404
 def get_random_32_string():
     return get_random_string(length=32)
 
-# TODO: move staff boolean here and out of member
 class UserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     discord = models.BooleanField(null=False, default=False)
@@ -58,8 +57,8 @@ class Server(models.Model):
 class Member(models.Model):
     username = models.CharField(max_length=50)
     name = models.CharField(max_length=50, null=True)
-    staff = models.BooleanField(null=False, default=False)
     account = models.ForeignKey(User, null=True)
+    staff = models.BooleanField(null=False, default=False)
     server = models.ForeignKey(Server, null=False)
 
     def display(self):
@@ -96,8 +95,6 @@ class Member(models.Model):
 class Punishment(models.Model):
     key = models.CharField(max_length=30)
     name = models.TextField(max_length=100, null=False, blank=False)
-    timeInHours = models.IntegerField(default=0)
-    appealWaitHours = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name + " (" + self.key + ")"
@@ -115,6 +112,8 @@ class Log(models.Model):
     punishment = models.ForeignKey(Punishment, null=False)
     staff = models.ForeignKey(Member, related_name="staff_punisher", null=False)
     actionTime = models.DateTimeField(auto_now_add=True)
+    timeInHours = models.IntegerField(default=0)
+    appealWaitHours = models.IntegerField(default=0)
     server = models.ForeignKey(Server, null=False)
 
     def __str__(self):
@@ -135,14 +134,14 @@ class Log(models.Model):
         if not self.has_time():
             return True
         else:
-            wait = self.punishment.appealWaitHours
+            wait = self.appealWaitHours
             if wait > 0:
                 if self.time_elapsed() < wait:
                     return False
             return True
 
     def has_time(self):
-        return self.punishment.timeInHours > 0
+        return self.timeInHours > 0
 
     # time elapsed in hours
     def time_elapsed(self):
@@ -150,9 +149,9 @@ class Log(models.Model):
         return diff / timedelta(hours=1)
 
     def progress(self):
-        if self.punishment.timeInHours > 0:
+        if self.timeInHours > 0:
             timeDiff = datetime.now(timezone.utc) - self.actionTime
-            progress = timeDiff / timedelta(hours=self.punishment.timeInHours)
+            progress = timeDiff / timedelta(hours=self.timeInHours)
             if progress > 1:
                 progress = 1
             return progress

@@ -3,8 +3,21 @@
 {% block title %}Staff - {{ server.name }}{% endblock %}
 {% block content %}
     <h2>Server Staff Dashboard</h2>
-    <div class="container">
-        <div class="list-group col-lg-7 offset-lg-5">
+    <hr>
+    <div class="row">
+    <div class="col-lg-3">
+            <div class="card">
+                <p class="card-header">
+                    Quick Links
+                </p>
+                <div class="card-body">
+                    • <a href="#">Manage Mod Logs</a>
+                    <br>
+                    • <a href="#">Website Settings</a>
+                </div>
+            </div>
+        </div>
+        <div class="list-group col-lg-7 offset-lg-2">
             <h5>Unresolved Mail and Appeals:</h5>
             <div class="list-group">
                 {% for mail in all_mail %}
@@ -20,7 +33,7 @@
                             <p>
                                 {{ mail.content }}
                             </p>
-                            <button class="btn btn-primary btn-sm">Mark As Read</button>
+                            <button class="btn btn-primary btn-sm">Mark As...</button>
                             <button class="btn btn-primary btn-sm">Send Response</button>
                             <button class="btn btn-danger btn-sm">Delete</button>
                         </div>
