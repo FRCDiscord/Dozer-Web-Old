@@ -123,7 +123,9 @@ class Log(models.Model):
         return self.staff.display() + "'s " + self.punishment.name + " on me at " + str(self.actionTime)
 
     def appeal_url(self):
-        return reverse('public:mail') + "?appeal=" + self.key
+        return reverse('public:mail', kwargs={
+            'server_id': self.server.id
+        }) + "?appeal=" + str(self.id)
 
     # Whether this Log is allowed to be appealed or not
     def can_appeal(self):
@@ -165,13 +167,22 @@ class Log(models.Model):
 
 
 class Mail(models.Model):
+    state_choices = (
+        ("unread", "unread"),
+        ("read", "read"),
+        ("resolved", "resolved"),
+        ("spam", "spam")
+    )
+
     sender = models.CharField(max_length=50, blank=False)
     subject = models.CharField(max_length=100, blank=False)
     content = models.TextField(max_length=2000, blank=False)
     server = models.ForeignKey(Server, null=False)
 
     user = models.ForeignKey(UserInfo, null=True)
-    read = models.BooleanField(default=False)
+    appeal = models.ForeignKey(Log, null=True)
+    state = models.CharField(max_length=50, default="unread", choices=state_choices)
+
 
 class APIToken(models.Model):
     token = models.CharField(max_length=50, null=False, primary_key=True)

@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^(?P<server_id>[0-9]+)/mod-mail/$', mail.mail, name='mail'),
     url(r'^(?P<server_id>[0-9]+)/mod-mail/send/$', mail.mail_receive, name='mail_receive'),
 
+    url(r'^(?P<server_id>[0-9]+)/staff/mail_update$', serverstaff.staff_mail_update, name='staff_mail_update'),
     url(r'^(?P<server_id>[0-9]+)/staff/$', serverstaff.staff_index, name='staff_index'),
 
     url(r'^(?P<server_id>[0-9]+)/log-in/$', auth.login_or_register, name='login'),

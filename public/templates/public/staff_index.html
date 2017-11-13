@@ -5,7 +5,7 @@
     <h2>Server Staff Dashboard</h2>
     <hr>
     <div class="row">
-    <div class="col-lg-3">
+        <div class="col-lg-3">
             <div class="card">
                 <p class="card-header">
                     Quick Links
@@ -21,25 +21,93 @@
             <h5>Unresolved Mail and Appeals:</h5>
             <div class="list-group">
                 {% for mail in all_mail %}
-                    <a data-toggle="collapse" href="#mail_{{ mail.id }}"
+                    <a id="{{mail.id}}_entry" data-toggle="collapse" href="#mail_{{ mail.id }}"
                        class="list-group-item list-group-item-action">
-                        <span><strong>Mail: </strong> {{ mail.subject }} <span
-                                class="text-muted">(from {{ mail.sender }})</span></span>
-                        {% if not mail.read %}
-                            <span class="badge badge-danger">Unread</span>
-                        {% endif %}
+                        <span>
+                            {% if mail.appeal %}
+                                <strong class="text-danger">Appeal: </strong> {{ mail.subject }}
+                            {% else %}
+                                <strong>Mail: </strong> {{ mail.subject }}
+                            {% endif %}
+                            <span class="text-muted">
+                            {% if mail.user %}
+                                (from <strong>verified</strong> {{ mail.sender }})
+                            {% else %}
+                                (from anonymous "{{ mail.sender }}")
+                            {% endif %}
+                            </span>
+                        </span>
+                        <span id="{{ mail.id }}_status" class="badge"></span>
                         <div class="collapse" id="mail_{{ mail.id }}">
                             <hr>
                             <p>
                                 {{ mail.content }}
                             </p>
-                            <button class="btn btn-primary btn-sm">Mark As...</button>
+                            <span class="dropdown">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    Mark As...
+                                </button>
+
+                                <div class="dropdown-menu" aria-labelledby="dLabel">
+                                    <button class="dropdown-item" onclick="mark_as('read', {{mail.id}})" type="button">Read</button>
+                                    <button class="dropdown-item" onclick="mark_as('unread', {{mail.id}})" type="button">Unread</button>
+                                    <button class="dropdown-item text-success" onclick="mark_as('resolved', {{mail.id}})" type="button">Resolved</button>
+                                    <button class="dropdown-item text-danger" onclick="mark_as('spam', {{mail.id}})" type="button">Spam</button>
+                                </div>
+                             </span>
                             <button class="btn btn-primary btn-sm">Send Response</button>
-                            <button class="btn btn-danger btn-sm">Delete</button>
+                            <button class="btn btn-danger btn-sm" onclick="mark_as('delete', {{mail.id}})">Delete</button>
                         </div>
                     </a>
                 {% endfor %}
             </div>
         </div>
     </div>
+    <script>
+
+        function mark_as(type, mail_id, server_update=true) {
+            if (type == 'delete') {
+                $("#" + mail_id + "_entry").remove()
+                //toast("Deleted mail.", "success")
+            } else {
+                statusbadge = $("#" + mail_id + "_status")
+                statusbadge.attr("class", "badge")
+                if (type == 'read') {
+                    statusbadge.text("Pending")
+                    statusbadge.addClass("badge-warning")
+                } else if (type == 'unread') {
+                    statusbadge.text("Unread")
+                    statusbadge.addClass("badge-danger")
+                } else if (type == 'resolved') {
+                    statusbadge.text("Resolved")
+                    statusbadge.addClass("badge-success")
+                } else if (type == 'spam') {
+                    statusbadge.text("Spam")
+                    statusbadge.addClass("badge-danger")
+                } else {
+                    statusbadge.text("ERROR")
+                    statusbadge.addClass("badge-info")
+                }
+            }
+            if (server_update) {
+                sendData = {
+                    type: type,
+                    mail_id: mail_id
+                }
+                $.post("{% url 'public:staff_mail_update' server_id=server.id %}", sendData).done(function (data) {
+                    if (!data.success) {
+                        toast("There was an error: " + data.error, "danger", 10000)
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            {% for mail in all_mail %}
+                mark_as("{{mail.state}}", {{mail.id}}, false)
+            {% endfor %}
+        });
+    </script>
 {% endblock %}

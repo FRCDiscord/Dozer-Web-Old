@@ -1,5 +1,7 @@
 {% extends "public/server_base.html" %}
 
+<!--TODO: redirect somewhere after submit, instead of the page refreshing-->
+
 {% block content %}
     {% if appeal %}
         <h2>Punishment Appeal</h2>
@@ -37,6 +39,10 @@
             <label for="name">Content</label>
             <textarea class="form-control" id="text" name="content" rows="6" maxlength="2000"></textarea>
         </div>
+        <input type="hidden" name="type" value="{% if appeal %}appeal{% else %}mail{% endif %}"/>
+        {% if appeal %}
+            <input type="hidden" name="appeal_id" value="{{appeal.id}}"/>
+        {% endif %}
         <button class="btn btn-primary" action="submit">Send</button>
     </form>
 {% endblock %}

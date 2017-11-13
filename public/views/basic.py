@@ -34,7 +34,7 @@ def about(request, server_id):
         "server": Server.get(server_id)
     })
 
-# TODO: once we have the data, exclude users who aren't in the discord anymore
+# TODO: change this to use Dozer's rankings
 def rankings(request, server_id):
     result = requests.get("https://mee6.xyz/levels/176186766946992128?json=0")
     json = result.json()

@@ -1,3 +1,4 @@
+//TODO: Figure out why toasts only work once per page?
 function toast(text) {
     constructToast({
         html: text

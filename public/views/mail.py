@@ -18,7 +18,7 @@ def mail(request, server_id):
 
     if 'appeal' in data and request.user.is_authenticated and member:
         try:
-            appeal = Log.objects.get(key=data['appeal'])
+            appeal = Log.objects.get(id=data['appeal'])
             prefill_subject = appeal.appeal_subject()
             subject_class_add = "readonly"
         except Exception:
@@ -45,16 +45,21 @@ def mail(request, server_id):
 
 def mail_receive(request, server_id):
     if request.method == 'POST':
+        server = Server.get(server_id)
         data = request.POST
-        #data = dict(data)
+        sender=data['sender']
         user = None
         if request.user.is_authenticated:
             user = UserInfo.get(request.user)
-        mail = Mail(sender=data['sender'],
+            sender = user.display()
+        mail = Mail(sender=sender,
                     subject=data['subject'],
                     content=data['content'],
                     user=user,
-                    server=Server.get(server_id))
+                    server=server)
+        type = data['type']
+        if type == "appeal":
+            mail.appeal = Log.objects.get(id=data['appeal_id'], server=server)
         mail.save()
         # TODO: toast/notification of success
         return redirect("public:mail", server_id)
