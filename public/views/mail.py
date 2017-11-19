@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.urls import reverse
 from ..models import Member, Log, Server, Mail, UserInfo
 
 def mail(request, server_id):
@@ -61,8 +62,17 @@ def mail_receive(request, server_id):
         if type == "appeal":
             mail.appeal = Log.objects.get(id=data['appeal_id'], server=server)
         mail.save()
-        # TODO: toast/notification of success
-        return redirect("public:mail", server_id)
+
+        # TODO: Make this look better and improve the message (including the alternate
+        # TODO: message for if this is an appeal.
+
+        return render(request, "public/result.html", {
+            "title": "Mail Sent",
+            "message": "Thank you, your Mod Mail has been submitted! The moderation team will make sure to get to it quickly. "
+                       "You'll be redirected in a moment...",
+            "redirect_url": reverse('public:index', args=[server_id]),
+            "server": Server.get(server_id)
+        })
     else:
         return JsonResponse({
             "error": "This is used via POST."

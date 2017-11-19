@@ -48,6 +48,14 @@ def rankings(request, server_id):
         "server": Server.get(server_id)
     })
 
+
+def result(request, server_id):
+    return render(request, "public/result.html", {
+        "title": "Test",
+        "message": "You did the thing! Yay! <br><br><b>YEAH</b>",
+        "server": Server.get(server_id)
+    })
+
 def account(request, server_id):
     if request.user.is_authenticated:
         server = Server.get(server_id)

@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^(?P<server_id>[0-9]+)/about/$', basic.about, name='about'),
     url(r'^(?P<server_id>[0-9]+)/rankings/$', basic.rankings, name='rankings'),
     url(r'^(?P<server_id>[0-9]+)/account/$', basic.account, name='account'),
+    url(r'^(?P<server_id>[0-9]+)/result/$', basic.result, name='result'),
     url(r'^(?P<server_id>[0-9]+)/$', basic.index, name='index'),
     url(r'^$', basic.dozer_index, name='dozer_index'),
 

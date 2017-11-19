@@ -1,0 +1,23 @@
+{% extends 'public/server_base.html' %}
+
+{% block title %}{{title}} - {{server.name}}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="card col-sm-6 offset-sm-3">
+            <div class="card-body">
+                <h4 class="card-title">{{title}}</h4>
+                <p>
+                    {{ message | safe }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function(){
+            setTimeout(function() {
+                window.location.href="{{redirect_url}}"
+            }, 4500)
+        })
+    </script>
+{% endblock %}
