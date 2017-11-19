@@ -20,10 +20,15 @@
                 <input type="text" class="form-control" id="name" name="sender" maxlength="50" placeholder="Jerry" value="{{prefill_name}}" {{ name_class_add }}>
                 {% if not appeal %}
                     <small class="form-text text-muted">
-                        We only ask for your name so that we can contact you if we have any questions.
                         {% if request.user.is_authenticated %}
-                            If you'd <i>really</i> rather stay anonymous, you can
-                            <a href="{% url 'public:logout' server_id=server.id %}">log out</a> first.
+                            We only ask for your name so that we can contact you as a followup
+                            or if we have any questions. If you'd <i>really</i> rather stay
+                            anonymous, you can <a href="{% url 'public:logout' server_id=server.id %}">
+                            log out</a> first.
+                        {% else %}
+                            Fair warning; if you don't <a href="{% url 'public:login' server_id=server.id %}">
+                        log in</a> and instead submit an anonymous mail (what you're doing right now),
+                            we won't be able to follow up with you!
                         {% endif %}
                     </small>
                 {% endif %}

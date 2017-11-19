@@ -18,6 +18,7 @@ def staff_index(request, server_id):
     else:
         raise Http404("User who is not staff tried to access a staff page")
 
+
 @csrf_exempt
 def staff_mail_update(request, server_id):
     if request.method == 'GET':
